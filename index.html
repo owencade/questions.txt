@@ -5,14 +5,31 @@
 </head>
 <body>
   <h1>Ask Me Anything</h1>
-  <form>
-    <input type="text" placeholder="Ask me anything...">
-    <button type="submit">Ask</button>
+  <form method="POST" action="/ask">
+    <label for="question">Ask a question:</label><br>
+    <textarea id="question" name="question"></textarea><br>
+    <input type="submit" value="Submit">
   </form>
-  <h2>Previous Questions</h2>
-  <ul id="questions-list">
-  </ul>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="app.js"></script>
+  <h2>Previous Questions:</h2>
+  <ul id="questions"></ul>
+
+  <script>
+    // Fetch questions from server and append to list
+    async function getQuestions() {
+      const response = await fetch('/questions');
+      const questions = await response.json();
+      const questionsList = document.getElementById('questions');
+      questionsList.innerHTML = '';
+      questions.forEach(question => {
+        const li = document.createElement('li');
+        li.textContent = question;
+        questionsList.appendChild(li);
+      });
+    }
+
+    // Call getQuestions on load
+    window.onload = getQuestions;
+  </script>
 </body>
 </html>
+
